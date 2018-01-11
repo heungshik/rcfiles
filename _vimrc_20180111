@@ -1,0 +1,188 @@
+set nocompatible
+filetype off
+set rtp+=$HOME/vimfiles/bundle/Vundle.vim
+call vundle#begin('$HOME/vimfiles/bundle/')
+
+Plugin 'gmarik/Vundle.vim'
+Plugin 'vimwiki/vimwiki'
+Plugin 'mattn/calendar-vim'
+Plugin 'scrooloose/nerdtree'
+Plugin 'ervandew/supertab'
+" Track the engine.
+Plugin 'SirVer/ultisnips'
+" Snippets are separated from the engine. Add this if you want them:
+Plugin 'honza/vim-snippets'
+Plugin 'Valloric/YouCompleteMe'
+Plugin 'ctrlpvim/ctrlp.vim'
+Plugin 'python-mode/python-mode'
+Plugin 'vim-syntastic/syntastic'
+Plugin 'nvie/vim-flake8'
+Plugin 'jnurmine/Zenburn'
+Plugin 'altercation/vim-colors-solarized'
+Plugin 'jistr/vim-nerdtree-tabs'
+Plugin 'tpope/vim-fugitive'
+Plugin 'Lokaltog/powerline', {'rtp': 'powerline/bindings/vim/'}
+" Plugin 'LaTeX-Suite-aka-Vim-LaTeX'
+Plugin 'vim-latex/vim-latex'
+
+" dbext
+" taglist
+" ConqueTerm
+" YankRing.vim
+" ipy.vim
+
+call vundle#end()
+set langmenu=none
+
+filetype plugin indent on    " required
+let python_highlight_all=1
+syntax on
+
+let mapleader=','
+let g:vimwiki_list=[{'path':'~/vimwiki/vimwiki/', 'path_html':'~/vimwiki/vimwiki_html/'}]
+" To ignore plugin indent changes, instead use:
+"filetype plugin on
+"
+" Brief help
+" :PluginList       - lists configured plugins
+" :PluginInstall    - installs plugins; append `!` to update or just :PluginUpdate
+" :PluginSearch foo - searches for foo; append `!` to refresh local cache
+" :PluginClean      - confirms removal of unused plugins; append `!` to auto-approve removal
+"
+" see :h vundle for more details or wiki for FAQ
+" Put your non-Plugin stuff after this line
+"
+" vimwiki settings {{{
+au BufRead,BufNewFile *.wiki set filetype=vimwiki
+":autocmd FileType vimwiki map d :VimwikiMakeDiaryNote
+function! ToggleCalendar()
+  execute ":Calendar"
+  if exists("g:calendar_open")
+    if g:calendar_open == 1
+      execute "q"
+      unlet g:calendar_open
+    else
+     g:calendar_open = 1
+    end
+  else
+    let g:calendar_open = 1
+  end
+endfunction
+
+set encoding=utf8
+":autocmd FileType vimwiki map c :call ToggleCalendar()
+" }}}
+" http://blog.mague.com/?p=602
+
+" Ultisnipps setting {{{
+
+" Trigger configuration. Do not use <tab> if you use https://github.com/Valloric/YouCompleteMe.
+" let g:UltiSnipsExpandTrigger="<tab>"
+" let g:UltiSnipsJumpForwardTrigger="<c-b>"
+" let g:UltiSnipsJumpBackwardTrigger="<c-z>"
+
+" If you want :UltiSnipsEdit to split your window.
+let g:UltiSnipsEditSplit="vertical"
+
+" YouCompleteMe and UltiSnips compatibility, with the helper of supertab
+" (via http://stackoverflow.com/a/22253548/1626737)
+let g:SuperTabDefaultCompletionType    = '<C-n>'
+let g:SuperTabCrMapping                = 0
+let g:UltiSnipsExpandTrigger           = '<tab>'
+let g:UltiSnipsJumpForwardTrigger      = '<tab>'
+let g:UltiSnipsJumpBackwardTrigger     = '<s-tab>'
+let g:ycm_key_list_select_completion   = ['<C-j>', '<C-n>', '<Down>']
+let g:ycm_key_list_previous_completion = ['<C-k>', '<C-p>', '<Up>']
+let g:UltiSnipsSnippetDirectories = ['~/vimfiles/UltiSnips', 'UltiSnips']
+
+"}}}
+
+"{{{
+let g:nerdtree_tabs_open_on_gui_startup = 0
+nnoremap <Leader>rc :rightbelow vnew $MYVIMRC<CR>
+nnoremap <Leader>f :NERDTreeFind<CR>
+nnoremap <Leader>n :NERDTreeToggle<CR>
+let NERDTreeIgnore=['\.pyc$', '\~$'] "ignore files in NERDTree
+noremap <C-h> <C-w>h
+noremap <C-j> <C-w>j
+noremap <C-k> <C-w>k
+noremap <C-l> <C-w>l
+"}}}
+"
+lcd \projects\
+
+"{{{
+let g:ctrlp_map = '<c-p>'
+let g:ctrop_cmd = 'CtrlP'
+"}}}
+set tabstop=4
+set sts=4
+set sw=4
+set expandtab
+set ai
+set textwidth=79
+set cursorline
+set colorcolumn=81
+
+
+
+
+au BufNewFile,BufRead *.py  set tabstop=4 softtabstop=4 shiftwidth=4 textwidth=79 expandtab autoindent fileformat=unix 
+
+" au BufNewFile,BufRead *.py  set tabstop=4 softtabstop=4 shiftwidth=4 textwidth=79 expandtab autoindent fileformat=unix 
+
+
+au BufNewFile,BufRead *.js, *.html, *.css set tabstop=2 softtabstop=2 shiftwidth=2
+
+
+au BufRead,BufNewFile *.py,*.pyw,*.c,*.h match BadWhitespace /\s\+$/
+
+augroup tex
+au!
+au BufRead,BufNewFile *.tex silent! so ~/vimfiles/bundle/vim-latex/plugin/filebrowser.vim 
+au BufRead,BufNewFile *.tex silent! so ~/vimfiles/bundle/vim-latex/plugin/imaps.vim 
+au BufRead,BufNewFile *.tex silent! so ~/vimfiles/bundle/vim-latex/plugin/remoteOpen.vim 
+au BufRead,BufNewFile *.tex silent! so ~/vimfiles/bundle/vim-latex/plugin/SyntaxFolds.vim 
+au BufRead,BufNewFile *.tex silent! so ~/vimfiles/bundle/vim-latex/ftplugin/tex_latexSuite.vim
+augroup END
+
+
+
+let g:ycm_autoclose_preview_window_after_completion=1
+map <leader>g  :YcmCompleter GoToDefinitionElseDeclaration<CR>
+
+"python with virtualenv support
+py << EOF
+import os
+import sys
+if 'VIRTUAL_ENV' in os.environ:
+  project_base_dir = os.environ['VIRTUAL_ENV']
+  activate_this = os.path.join(project_base_dir, 'bin/activate_this.py')
+  execfile(activate_this, dict(__file__=activate_this))
+EOF
+
+
+ 
+
+if has('gui_running')
+  set background=dark
+  colorscheme solarized
+else
+  colorscheme zenburn
+endif
+
+
+" {{{ latex
+set shellslash
+" set grepprg=grep \ -nH $*
+let g:tex_flavor='latex'
+" }}}
+"
+" {{{ swapfile backupfile, undofile
+set undodir=~/vimfiles/undo//
+set backupdir=~/vimfiles/backup//
+set directory=~/vimfiles/swp//
+"set nobackup
+"set noswapfile
+"set noundofile
+" }}}
