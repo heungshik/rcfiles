@@ -1,0 +1,427 @@
+    set nocompatible
+    filetype off
+    set rtp+=$HOME/.vim/bundle/Vundle.vim
+    call vundle#begin('$HOME/.vim/bundle/')
+
+    Plugin 'gmarik/Vundle.vim'
+    Plugin 'vimwiki/vimwiki'
+    Plugin 'mattn/calendar-vim'
+    Plugin 'scrooloose/nerdtree'
+    Plugin 'ervandew/supertab'
+    " Track the engine.
+    Plugin 'SirVer/ultisnips'
+    " Snippets are separated from the engine. Add this if you want them:
+    Plugin 'honza/vim-snippets'
+    Plugin 'Valloric/YouCompleteMe'
+    Plugin 'ctrlpvim/ctrlp.vim'
+    Plugin 'python-mode/python-mode'
+    Plugin 'vim-syntastic/syntastic'
+    Plugin 'nvie/vim-flake8'
+    Plugin 'jnurmine/Zenburn'
+    Plugin 'altercation/vim-colors-solarized'
+    Plugin 'jistr/vim-nerdtree-tabs'
+    Plugin 'tpope/vim-fugitive'
+    Plugin 'Lokaltog/powerline', {'rtp': 'powerline/bindings/vim/'}
+    Plugin 'rosenfeld/conque-term'
+    " Plugin 'LaTeX-Suite-aka-Vim-LaTeX'
+    " Plugin 'vim-latex/vim-latex'
+    Plugin 'mklabs/vim-cowsay'
+    Plugin 'lervag/vimtex'
+    Plugin 'majutsushi/tagbar'
+    Plugin 'skywind3000/asyncrun.vim'
+    Plugin 'scrooloose/nerdcommenter'
+    Plugin 'godlygeek/tabular'
+    Plugin 'dbext.vim'
+    Plugin 'Rykka/riv.vim'
+    Plugin 'Rykka/InstantRst'
+    Plugin 'amiorin/vim-project'
+    Plugin 'vim-gitgutter'
+    Plugin 'elzr/vim-json'
+    Plugin 'metakirby5/codi.vim'
+    Plugin 'ryanoasis/vim-devicons'
+    Plugin 'tomtom/tcomment_vim'
+    "Plugin 'edsono/vim-matchit'
+    "Plugin 'justinmk/vim-sneak'
+    "Plugin 'mhinz/vim-signify'
+    "Plugin 'sjl/gundo.vim'
+    "Plugin 'tpope/vim-sleuth'
+    "Plugin 'tpope/vim-surround'
+    "Plugin 'tyru/open-browser.vim'
+    "Plugin 'tomasr/molokai'
+    "Plugin 'flazz/vim-colorschemes'
+    "Plugin 'plasticboy/vim-markdown'
+
+" let g:project_use_nerdtree = 1
+" set rtp+=~/.vim/bundle/vim-project/
+" call project#rc("~/projects/python")
+" Project  'scratch'
+
+" Project  'dotfiles'
+" File     'dotfiles/vimrc'                       , 'vimrc'
+" File     'dotfiles/gvimrc'                      , 'gvimrc'
+" File     'dotfiles/zshrc'                       , 'zshrc'
+
+" Project  'gollum'
+" File     'gollum/Todo.md'                       , 'todo'
+" Callback 'gollum'                               , 'RemoveTextWidth'
+
+function! RemoveTextWidth(...) abort
+  setlocal textwidth=0
+endfunction
+
+let g:tex_flavor = 'latex'
+let g:vimtex_compiler_latexmk_engines = {
+    \ '_'                : '-pdf',
+    \ 'pdflatex'         : '-pdf',
+    \ 'lualatex'         : '-lualatex',
+    \ 'xelatex'          : '-xelatex',
+    \ 'context (pdftex)' : '-pdf -pdflatex=texexec',
+    \ 'context (luatex)' : '-pdf -pdflatex=context',
+    \ 'context (xetex)'  : '-pdf -pdflatex=''texexec --xtx''',
+    \}
+let g:vimtex_view_method = 'mupdf'
+
+" " Project  'octopress'
+" Project  'gsource'
+" Project  'markup'
+" Project  'glib'
+" Project  'reloadlive'
+" Project  'flashcards'
+" Project  'leitner'
+" Callback 'leitner'                              , ['AddSpecToPath', 'RemoveTextWidth']
+
+" function! AddSpecToPath(tile) abort
+  " setlocal path+=spec
+" endfunction
+
+" Project  '~/.vim/bundle/vim-fenced-code-blocks' , 'fenced'
+" Project  '~/.vim/bundle/vim-project'            , 'project'
+" Project  '~/.vim/bundle/vim-bookmarks'          , 'bookmarks'
+" Project  '~/.vim/bundle/ctrlp.vim'              , 'ctrlp'
+" Project  '~/.vim/bundle/ctrlp-z'                , 'ctrlp-z'
+" Project  '~/.vim/bundle/vim-eval'               , 'eval'
+
+
+    " dbext
+    " taglist
+    " ConqueTerm
+    " YankRing.vim
+    " ipy.vim
+    " gundo
+    " jedi-vim
+    " vim-airline
+
+    call vundle#end()
+    set langmenu=none
+
+    filetype plugin indent on    " required
+    let g:pymode_python='python3'
+    let python_highlight_all=1
+    syntax on
+
+    let mapleader=','
+    let g:vimwiki_list=[{'path':'~/vimwiki/vimwiki/',
+                        \'path_html':'~/vimwiki/vimwiki_html/',
+                        \'template_path':'~/vimwiki/vimwiki_html/'.'assets/',
+                        \'template_default': 'default',
+                        \'template_ext': '.tpl',
+                        \'auto_export': 0}]
+    " To ignore plugin indent changes, instead use:
+    "filetype plugin on
+    "
+    " Brief help
+    " :PluginList       - lists configured plugins
+    " :PluginInstall    - installs plugins; append `!` to update or just :PluginUpdate
+    " :PluginSearch foo - searches for foo; append `!` to refresh local cache
+    " :PluginClean      - confirms removal of unused plugins; append `!` to auto-approve removal
+    "
+    " see :h vundle for more details or wiki for FAQ
+    " Put your non-Plugin stuff after this line
+    " 
+    " vimwiki settings {{{
+    au BufRead,BufNewFile *.wiki set filetype=vimwiki
+    ":autocmd FileType vimwiki map d :VimwikiMakeDiaryNote
+    function! ToggleCalendar()
+      execute ":Calendar"
+      if exists("g:calendar_open")
+        if g:calendar_open == 1
+          execute "q"
+          unlet g:calendar_open
+        else
+         g:calendar_open = 1
+        end
+      else
+        let g:calendar_open = 1
+      end
+    endfunction
+
+    " set encoding=cp949
+    set encoding=utf8
+    ":autocmd FileType vimwiki map c :call ToggleCalendar()
+    " }}}
+    " http://blog.mague.com/?p=602
+
+    " Ultisnipps setting {{{
+
+    " Trigger configuration. Do not use <tab> if you use https://github.com/Valloric/YouCompleteMe.
+    " let g:UltiSnipsExpandTrigger="<tab>"
+    " let g:UltiSnipsJumpForwardTrigger="<c-b>"
+    " let g:UltiSnipsJumpBackwardTrigger="<c-z>"
+
+
+    " YouCompleteMe and UltiSnips compatibility, with the helper of supertab
+    " (via http://stackoverflow.com/a/22253548/1626737)
+    let g:SuperTabDefaultCompletionType    = '<C-n>'
+    let g:SuperTabCrMapping                = 0
+    let g:UltiSnipsExpandTrigger           = '<tab>'
+    let g:UltiSnipsJumpForwardTrigger      = '<tab>'
+    let g:UltiSnipsJumpBackwardTrigger     = '<s-tab>'
+    let g:ycm_key_list_select_completion   = ['<C-j>', '<C-n>', '<Down>']
+    let g:ycm_key_list_previous_completion = ['<C-k>', '<C-p>', '<Up>']
+    " ultisnips custom snippets directory
+    let g:UltiSnipsSnippetsDir= '~/.vim/UltiSnips'
+    " If you want :UltiSnipsEdit to split your window.
+    let g:UltiSnipsEditSplit="vertical"
+
+    "}}}
+
+    "{{{
+    let g:nerdtree_tabs_open_on_gui_startup = 0
+    nnoremap <Leader>rc :rightbelow vnew $MYVIMRC<CR>
+    nnoremap <Leader>f :NERDTreeFind<CR>
+    nnoremap <Leader>n :NERDTreeToggle<CR>
+    nnoremap <Leader>p :Vexplore %:p:h<CR>
+let NERDTreeIgnore=['\.pyc$', '\~$'] "ignore files in NERDTree
+noremap <C-h> <C-w>h
+noremap <C-j> <C-w>j
+noremap <C-k> <C-w>k
+noremap <C-l> <C-w>l
+"}}}
+"
+"lcd \projects\playground
+
+"{{{
+let g:ctrlp_map = '<c-p>'
+let g:ctrop_cmd = 'CtrlP'
+"}}}
+set tabstop=4
+set sts=4
+set sw=4
+set expandtab
+set ai
+set textwidth=79
+set cursorline
+set colorcolumn=81
+
+
+
+
+" au BufNewFile,BufRead *.py  set tabstop=4 softtabstop=4 shiftwidth=4 textwidth=79 expandtab autoindent fileformat=unix 
+
+" au BufNewFile,BufRead *.py  set tabstop=4 softtabstop=4 shiftwidth=4 textwidth=79 expandtab autoindent fileformat=unix 
+
+
+au BufNewFile,BufRead *.js, *.html, *.css set tabstop=2 softtabstop=2 shiftwidth=2
+
+
+" au BufRead,BufNewFile *.py,*.pyw,*.c,*.h match BadWhitespace /\s\+$/
+
+" augroup tex
+" au!
+" au BufRead,BufNewFile *.tex silent! so ~/.vim/bundle/vim-latex/plugin/filebrowser.vim 
+" au BufRead,BufNewFile *.tex silent! so ~/.vim/bundle/vim-latex/plugin/imaps.vim 
+" au BufRead,BufNewFile *.tex silent! so ~/.vim/bundle/vim-latex/plugin/remoteOpen.vim 
+" au BufRead,BufNewFile *.tex silent! so ~/.vim/bundle/vim-latex/plugin/SyntaxFolds.vim 
+" au BufRead,BufNewFile *.tex silent! so ~/.vim/bundle/vim-latex/ftplugin/tex_latexSuite.vim
+" augroup END
+
+
+
+let g:ycm_autoclose_preview_window_after_completion=1
+map <leader>g  :YcmCompleter GoToDefinitionElseDeclaration<CR>
+
+"python with virtualenv support
+
+
+if has('python3')
+"echo 'there is Python 3.x'
+let g:pymode_virtualenv_path = $VIRTUAL_ENV
+" py3 << EOF
+" import os
+" import sys
+" if 'VIRTUAL_ENV' in os.environ:
+"    project_base_dir = os.environ['VIRTUAL_ENV']
+"    # activate_this = os.path.join(project_base_dir, 'bin/activate_this.py')
+"    activate_this = os.path.join(project_base_dir, 'Scripts/activate_this.py')
+"    # execfile(activate_this, dict(__file__=activate_this))
+"    exec(open(activate_this).read())
+"EOF
+endif
+
+if has('python')
+let g:pymode_virtualenv_path = $VIRTUAL_ENV
+" echo 'there is Python 2.x'
+endif
+
+if has('gui_running')
+  set background=dark
+  colorscheme solarized
+else
+  colorscheme zenburn
+endif
+
+
+" {{{ latex
+" set shellslash
+" set grepprg=grep \ -nH $*
+" let g:tex_flavor='latex'
+" }}}
+"
+" {{{ swapfile backupfile, undofile
+set undodir=~/.vim/undo//
+set backupdir=~/.vim/backup//
+set directory=~/.vim/swp//
+"set nobackup
+"set noswapfile
+"set noundofile
+" }}}
+" set guifont=Consolas:h18:cANSI:qDRAFT
+set guifont=Monospace\ 14
+
+" pymode lint disable
+let g:pymode_lint = 0
+let g:pymode_lint_unmodified = 0
+let g:pymode_rope_lookup_project = 0
+let g:pymode_folding = 0
+
+" let g:Tex_CompileRule_dvi = 'pdflatex --interaction=nonstopmode $*'
+" let g:Tex_CompileRule_ps = 'dvips -Ppdf -o $*.ps $*.dvi'
+" let g:Tex_CompileRule_pdf = 'ps2pdf $*.ps'
+" let g:Tex_CompileRule_pdf = 'pdflatex --interaction=nonstopmode -shell-escape $*'
+" let g:Tex_DefaultTargetFormat='pdf'
+" nmap <a-j> <c-w>w<c-e><c-w>w
+" nmap <a-k> <c-w>w<c-y><c-w>w
+
+" clipboard
+set clipboard=unnamed
+" set nu
+" set rnu
+" set autochdir
+" nowrapping no physical line wrapping
+set textwidth=0 wrapmargin=0
+set nowrap
+call togglebg#map("<F5>")
+
+" if g:vimwiki_table_mappings
+"   inoremap <expr> <buffer> <Tab> vimwiki#tbl#kbd_tab()
+"   inoremap <expr> <buffer> <S-Tab> vimwiki#tbl#kbd_shift_tab()
+" endif
+let g:vimwiki_table_mappings = 0
+set cdpath+=c:\\
+set splitright
+set splitbelow
+
+" tagbar confi
+nmap <leader>t :TagbarToggle<CR>
+"
+nmap <leader>m :vert term cmd<CR>
+set visualbell
+" NERD Commenter
+" Add spaces after comment delimiters by default
+let g:NERDSpaceDelims = 1
+" Use compact syntax for prettified multi-line comments
+let g:NERDCompactSexyComs = 1
+" Align line-wise comment delimiters flush left instead of following code indentation
+let g:NERDDefaultAlign = 'left'
+" Set a language to use its alternate delimiters by default
+let g:NERDAltDelims_java = 1
+" Add your own custom formats or override the defaults
+let g:NERDCustomDelimiters = { 'c': { 'left': '/**','right': '*/' } }
+" Allow commenting and inverting empty lines (useful when commenting a region)
+let g:NERDCommentEmptyLines = 1
+" Enable trimming of trailing whitespace when uncommenting
+let g:NERDTrimTrailingWhitespace = 1
+" customize keymapping
+map <Leader>cc <plug>NERDComToggleComment
+map <Leader>c<space> <plug>NERDComComment
+" dbext.vim setting"
+"let g:dbext_default_profile_myASA = 'type=ASA:user=DBA:passwd=SQL'
+"let g:dbext_default_profile_mySQLServer = 'type=SQLSRV:integratedlogin=1:srvname=mySrv:dbname=myDB'
+"let g:dbext_default_profile_mySQL = 'type=MYSQL:user=root:passwd=whatever:dbname=mysql'
+"let g:dbext_default_profile_mySQL_DBI = 'type=DBI:user=root:passwd=whatever:driver=mysql:conn_parms=database=mysql;host=localhost'
+"let g:dbext_default_profile_myORA = 'type=ORA:srvname=zzz42ga:user=john:passwd=whatever'
+"let g:dbext_default_profile_mysqlite = 'type=SQLITE:dbname=///db.sqlite'
+let g:dbext_default_profile_pglocalhost = 'type=PGSQL:host=localhost:port=5433:dbname=hskim:user=hskim'
+let g:dbext_default_profile_pgSQL = 'type=PGSQL:host=localhost:port=5433:dbname=analysis:user=khs'
+let g:dbext_default_profile_pg100 = 'type=PGSQL:host=192.168.219.100:port=5433:dbname=analysis:user=hskim'
+let g:dbext_default_profile_pgSQLodoo = 'type=PGSQL:host=localhost:port=5433:dbname=odoo12_dev:user=khs'
+let g:dbext_default_profile='pglocalhost'
+
+" autocmd FileType c call tagbar#autoopen(0)
+" autocmd FileType python call tagbar#autoopen(0)
+
+augroup project1          
+    au!          
+    " Automatically choose the correct dbext profile          
+    autocmd BufRead */projectX/sql/* DBSetOption profile=myASA      
+augroup end      
+
+augroup project2          
+    au!          
+    " Automatically choose the correct dbext profile          
+    autocmd BufRead */projectY/* DBSetOption profile=myORA      
+augroup end
+
+"vimtips rayninfo vimtips
+
+let proj1 = { 'path': '~/riv/rst', }
+let g:riv_projects = [proj1]
+" sudo pip install https://github.com/Rykka/instant-rst.py/archive/master.zip
+" git clone  https://github.com/Rykka/rhythm.css.git
+" cd rhythm.css
+
+if exists(":Tabularize")
+  nmap <Leader>a= :Tabularize /=<CR>
+  vmap <Leader>a= :Tabularize /=<CR>
+  nmap <Leader>a: :Tabularize /:\zs<CR>
+  vmap <Leader>a: :Tabularize /:\zs<CR>
+endif
+
+inoremap <silent> <Bar>   <Bar><Esc>:call <SID>align()<CR>a
+
+function! s:align()
+  let p = '^\s*|\s.*\s|\s*$'
+  if exists(':Tabularize') && getline('.') =~# '^\s*|' && (getline(line('.')-1) =~# p || getline(line('.')+1) =~# p)
+    let column = strlen(substitute(getline('.')[0:col('.')],'[^|]','','g'))
+    let position = strlen(matchstr(getline('.')[0:col('.')],'.*|\s*\zs.*'))
+    Tabularize/|/l1
+    normal! 0
+    call search(repeat('[^|]*|',column).'\s\{-\}'.repeat('.',position),'ce',line('.'))
+  endif
+endfunction
+
+" local setting cd c:\projects\
+" lcd \users\KHS\projects
+" set autochdir
+
+command! -complete=shellcmd -nargs=+ Shell call s:TmpShellOutput(<q-args>)
+function! s:TmpShellOutput(cmdline) abort
+    if bufexists('tmplog')
+        " clear buffer content
+        call deletebufline('tmplog', 1, '$')
+    else
+        " create new buffer that will not be listed
+        call bufadd('tmplog')
+        call setbufvar('tmplog', "buftype", "nofile")
+        call setbufvar('tmplog', "filetype", "nofile")
+    endif
+    " start a job with bash on the argument
+    let logjob = job_start(["/bin/bash", "-c", a:cmdline],
+                \ {'out_io': 'buffer', 'out_name': 'tmplog', 'out_msg': ''})
+    " show the buffer as a panel on the far right-hand side, unwrapped
+    vert sbuffer tmplog
+    wincmd L
+    30 wincmd |
+endfunction
+
+nnoremap <buffer> H :<C-u>execute "!pydoc3 " . expand("<cword>")<CR>
